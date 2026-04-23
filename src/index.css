@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Assistant", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-blue: #2563EB;
+  --color-brand-blue-hover: #1D4ED8;
+  --color-bg-main: #F0F2F5;
+  --color-border-subtle: #E2E8F0;
+}
+
+body {
+  @apply bg-bg-main text-slate-800;
+  direction: rtl;
+}
+
+.card-base {
+  @apply bg-white rounded-xl border border-border-subtle shadow-xs p-6;
+}
+
+.btn-primary-polished {
+  @apply bg-brand-blue hover:bg-brand-blue-hover text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 shadow-sm flex items-center justify-center gap-2;
+}
+
+.badge-base {
+  @apply text-xs font-bold px-2 py-1 rounded-full inline-flex items-center justify-center;
+}
+
+.badge-strengths { @apply bg-green-100 text-green-800; }
+.badge-challenges { @apply bg-red-100 text-red-800; }
+.badge-suggestions { @apply bg-blue-100 text-blue-800; }
+
+.history-item-polished {
+  @apply p-4 border-b border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors last:border-b-0;
+}

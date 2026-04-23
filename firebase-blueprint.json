@@ -1,0 +1,53 @@
+{
+  "entities": {
+    "Reflection": {
+      "title": "Reflection",
+      "description": "A teacher's reflection on a lesson and its AI analysis.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the teacher who wrote the reflection."
+        },
+        "originalText": {
+          "type": "string",
+          "description": "The original text written by the teacher."
+        },
+        "analysis": {
+          "type": "object",
+          "description": "AI analysis of the reflection.",
+          "properties": {
+            "strengths": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "3 strengths identified."
+            },
+            "challenges": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "2 challenges identified."
+            },
+            "suggestions": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "3 short suggestions for improvement."
+            }
+          },
+          "required": ["strengths", "challenges", "suggestions"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp."
+        }
+      },
+      "required": ["userId", "originalText", "analysis", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/reflections/{reflectionId}": {
+      "schema": "Reflection",
+      "description": "Collection of lesson reflections."
+    }
+  }
+}

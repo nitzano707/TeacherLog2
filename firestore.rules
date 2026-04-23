@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidReflection(data) {
+      return data.userId == request.auth.uid
+        && data.originalText is string && data.originalText.size() <= 10000
+        && data.analysis is map
+        && data.analysis.strengths is list && data.analysis.strengths.size() == 3
+        && data.analysis.challenges is list && data.analysis.challenges.size() == 2
+        && data.analysis.suggestions is list && data.analysis.suggestions.size() == 3
+        && data.createdAt == request.time;
+    }
+
+    match /reflections/{reflectionId} {
+      allow get: if isSignedIn() && existing().userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      
+      allow create: if isSignedIn() 
+        && isValidId(reflectionId)
+        && isValidReflection(incoming());
+        
+      // Updates are not allowed in this app's current flow.
+      allow update: if false;
+      
+      allow delete: if isSignedIn() && existing().userId == request.auth.uid;
+    }
+  }
+}
