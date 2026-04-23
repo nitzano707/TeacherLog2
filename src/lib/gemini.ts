@@ -17,9 +17,13 @@ export interface ReflectionAnalysis {
 }
 
 export async function analyzeReflection(text: string): Promise<ReflectionAnalysis> {
-  const response = await ai.models.generateContent({
-    model: "gemini-2.5-flash-lite",
-    contents: `נתח את הרפלקציה הבאה של מורה על שיעור.
+  console.log("🚀 Starting analysis...");
+  console.log("📝 Input text:", text);
+
+  try {
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash-lite",
+      contents: `נתח את הרפלקציה הבאה של מורה על שיעור.
 החזר תוצאה במבנה JSON עם השדות הבאים בעברית:
 - strengths: רשימה של 3 נקודות חוזק בשיעור.
 - challenges: רשימה של 2 אתגרים שעלו מהשיעור.
@@ -27,32 +31,51 @@ export async function analyzeReflection(text: string): Promise<ReflectionAnalysi
 
 הרפלקציה:
 ${text}`,
-    config: {
-      responseMimeType: "application/json",
-      responseSchema: {
-        type: Type.OBJECT,
-        properties: {
-          strengths: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING },
-            description: "3 strengths"
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            strengths: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            },
+            challenges: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            },
+            suggestions: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING }
+            }
           },
-          challenges: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING },
-            description: "2 challenges"
-          },
-          suggestions: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING },
-            description: "3 short suggestions"
-          }
-        },
-        required: ["strengths", "challenges", "suggestions"]
+          required: ["strengths", "challenges", "suggestions"]
+        }
       }
-    }
-  });
+    });
 
-  const result = JSON.parse(response.text || "{}");
-  return result as ReflectionAnalysis;
+    console.log("📦 Full response object:", response);
+    console.log("📄 response.text:", response.text);
+
+    if (!response.text) {
+      console.warn("⚠️ response.text is empty");
+      throw new Error("Empty response from Gemini");
+    }
+
+    let parsed;
+    try {
+      parsed = JSON.parse(response.text);
+    } catch (parseError) {
+      console.error("❌ JSON parse failed:", response.text);
+      throw parseError;
+    }
+
+    console.log("✅ Parsed result:", parsed);
+
+    return parsed as ReflectionAnalysis;
+
+  } catch (error) {
+    console.error("🔥 Gemini error:", error);
+    throw error;
+  }
 }
