@@ -1,3 +1,4 @@
+console.log("VITE_GEMINI_API_KEY =", import.meta.env.VITE_GEMINI_API_KEY);
 import { GoogleGenAI, Type } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.VITE_GEMINI_API_KEY });
