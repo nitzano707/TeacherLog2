@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 
-console.log("VITE_GEMINI_API_KEY =", apiKey);
+//console.log("VITE_GEMINI_API_KEY =", apiKey);
 
 if (!apiKey) {
   throw new Error("Missing VITE_GEMINI_API_KEY");
@@ -17,8 +17,8 @@ export interface ReflectionAnalysis {
 }
 
 export async function analyzeReflection(text: string): Promise<ReflectionAnalysis> {
-  console.log("🚀 Starting analysis...");
-  console.log("📝 Input text:", text);
+  //console.log("🚀 Starting analysis...");
+  //console.log("📝 Input text:", text);
 
   try {
     const response = await ai.models.generateContent({
@@ -54,8 +54,8 @@ ${text}`,
       }
     });
 
-    console.log("📦 Full response object:", response);
-    console.log("📄 response.text:", response.text);
+    //console.log("📦 Full response object:", response);
+    //console.log("📄 response.text:", response.text);
 
     if (!response.text) {
       console.warn("⚠️ response.text is empty");
@@ -70,7 +70,7 @@ ${text}`,
       throw parseError;
     }
 
-    console.log("✅ Parsed result:", parsed);
+    //console.log("✅ Parsed result:", parsed);
 
     return parsed as ReflectionAnalysis;
 
