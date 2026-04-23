@@ -18,7 +18,7 @@ export interface ReflectionAnalysis {
 
 export async function analyzeReflection(text: string): Promise<ReflectionAnalysis> {
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    model: "gemini-2.5-flash-lite",
     contents: `נתח את הרפלקציה הבאה של מורה על שיעור.
 החזר תוצאה במבנה JSON עם השדות הבאים בעברית:
 - strengths: רשימה של 3 נקודות חוזק בשיעור.
