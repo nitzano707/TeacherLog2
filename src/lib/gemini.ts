@@ -1,7 +1,14 @@
-console.log("VITE_GEMINI_API_KEY =", import.meta.env.VITE_GEMINI_API_KEY);
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.VITE_GEMINI_API_KEY });
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+console.log("VITE_GEMINI_API_KEY =", apiKey);
+
+if (!apiKey) {
+  throw new Error("Missing VITE_GEMINI_API_KEY");
+}
+
+const ai = new GoogleGenAI({ apiKey });
 
 export interface ReflectionAnalysis {
   strengths: string[];
